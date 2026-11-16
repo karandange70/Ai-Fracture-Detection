@@ -1,15 +1,20 @@
-# Core Deep Learning (CPU optimized - lightweight for cloud deployment)
+# ==============================================================================
+# BoneSense AI - Requirements Specification
+# ==============================================================================
+
+# Core Deep Learning (CPU & GPU compatible)
 --extra-index-url https://download.pytorch.org/whl/cpu
-torch
-torchvision
+torch>=2.0.0
+torchvision>=0.15.0
 
-# Computer Vision & Image Processing
-opencv-python-headless
-Pillow
-numpy
-matplotlib
-scikit-learn
+# Computer Vision & Radiographic Image Processing
+opencv-python-headless>=4.8.0
+Pillow>=9.5.0
+numpy>=1.24.0
+matplotlib>=3.7.0
+scikit-learn>=1.3.0
+pandas>=2.0.0
 
-# Web Application & WSGI Server for Render/Cloud
-Flask
-gunicorn
+# Web Application & PACS Diagnostic Interface
+flask>=3.0.0
+werkzeug>=3.0.0

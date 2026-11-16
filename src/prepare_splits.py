@@ -4,11 +4,15 @@ import numpy as np
 import shutil
 import random
 
+WORKSPACE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 def prepare_balanced_train_test_splits(
-    base_data_dir=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data",
+    base_data_dir=None,
     test_ratio=0.20,
     seed=42
 ):
+    if base_data_dir is None:
+        base_data_dir = os.path.join(WORKSPACE_ROOT, "data")
     random.seed(seed)
     np.random.seed(seed)
     

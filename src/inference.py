@@ -6,12 +6,15 @@ import torch
 import torchvision.transforms as T
 from PIL import Image
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+WORKSPACE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, WORKSPACE_ROOT)
 
 from src.model import DualBoneFractureNetwork, FRACTURE_SUBTYPES
 from src.localization import GradCAMPlusPlus, extract_fracture_bbox_and_metrics, draw_orthopedic_calipers
 
-def load_trained_model(checkpoint_path=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\checkpoints\best_fracture_model.pt"):
+def load_trained_model(checkpoint_path=None):
+    if checkpoint_path is None:
+        checkpoint_path = os.path.join(WORKSPACE_ROOT, "checkpoints", "best_fracture_model.pt")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = DualBoneFractureNetwork(pretrained=False, num_classes=1, num_subtypes=5)
     
@@ -26,7 +29,9 @@ def load_trained_model(checkpoint_path=r"c:\Users\shaik\OneDrive\Desktop\ai frct
     model.eval()
     return model, device
 
-def run_diagnostic_inference(image_path, model, device, output_dir=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data\predictions", mm_per_pixel=0.15):
+def run_diagnostic_inference(image_path, model, device, output_dir=None, mm_per_pixel=0.15):
+    if output_dir is None:
+        output_dir = os.path.join(WORKSPACE_ROOT, "data", "predictions")
     os.makedirs(output_dir, exist_ok=True)
     base_name = os.path.splitext(os.path.basename(image_path))[0]
     
@@ -127,8 +132,11 @@ def run_diagnostic_inference(image_path, model, device, output_dir=r"c:\Users\sh
     print(f"Processed: {base_name:12} | Conf: {prob*100:5.1f}% | Subtype: {subtype_name[:22]:22} | Tilt: {metrics['angulation_deg']} deg | Gap: {metrics['displacement_gap_mm']} mm")
     return out_report_path, metrics
 
-def batch_inference_all(model, device, input_dir=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data\cleaned\unified_512"):
-    output_dir = r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data\predictions"
+def batch_inference_all(model, device, input_dir=None, output_dir=None):
+    if input_dir is None:
+        input_dir = os.path.join(WORKSPACE_ROOT, "data", "cleaned", "unified_512")
+    if output_dir is None:
+        output_dir = os.path.join(WORKSPACE_ROOT, "data", "predictions")
     files = sorted([f for f in os.listdir(input_dir) if f.endswith('.png')])
     print(f"\nRunning Dual-View Orthopedic Inference & Subtype Analysis on {len(files)} radiographs...")
     print("=" * 95)

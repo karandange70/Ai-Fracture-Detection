@@ -101,12 +101,17 @@ def evaluate_model(model, loader, device, criterion):
     return avg_loss, acc, prec, rec, f1, auc
 
 def train_fracatlas(
-    data_root=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data\fracatlas_prepared",
-    checkpoint_dir=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\checkpoints",
+    data_root=None,
+    checkpoint_dir=None,
     epochs=6,
     batch_size=16,
     learning_rate=3e-4
 ):
+    if data_root is None:
+        data_root = os.path.join(WORKSPACE_ROOT, "data", "fracatlas_prepared")
+    if checkpoint_dir is None:
+        checkpoint_dir = os.path.join(WORKSPACE_ROOT, "checkpoints")
+
     os.makedirs(checkpoint_dir, exist_ok=True)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("=" * 80)

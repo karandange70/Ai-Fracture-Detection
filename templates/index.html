@@ -600,49 +600,49 @@
         /* Robotic Verdict Strip */
         .cyber-verdict-strip {
             border-radius: var(--radius-md);
-            padding: 0.85rem 1.5rem;
+            padding: 0.75rem 1.25rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-align: center;
+            justify-content: space-between;
             border: 1px solid var(--border-subtle);
             background: var(--bg-card);
             transition: all 0.25s ease;
         }
 
         .cyber-verdict-strip.fracture-mode {
-            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(10, 16, 29, 0.95) 75%);
-            border-color: rgba(244, 63, 94, 0.65);
-            box-shadow: 0 0 20px rgba(244, 63, 94, 0.35);
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.16) 0%, rgba(10, 16, 29, 0.95) 75%);
+            border-color: rgba(244, 63, 94, 0.5);
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.25);
         }
 
         .cyber-verdict-strip.normal-mode {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(10, 16, 29, 0.95) 75%);
-            border-color: rgba(16, 185, 129, 0.65);
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.35);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.16) 0%, rgba(10, 16, 29, 0.95) 75%);
+            border-color: rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
         }
 
         .verdict-title {
             font-family: var(--font-display);
-            font-size: 1.6rem;
-            font-weight: 900;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
         }
 
         .fracture-mode .verdict-title {
             color: var(--accent-rose);
-            text-shadow: 0 0 20px rgba(244, 63, 94, 0.65);
+            text-shadow: 0 0 15px rgba(244, 63, 94, 0.4);
         }
 
         .normal-mode .verdict-title {
             color: var(--accent-emerald);
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.65);
+            text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
         }
 
         .verdict-sub {
-            display: none;
-        }
+            font-family: var(--font-terminal);
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
         }
 
         .verdict-subtype-tag {
@@ -834,13 +834,15 @@
 </head>
 <body>
 
-    <!-- Header -->
+    <!-- Robotic Header -->
     <header class="robot-header">
         <div class="brand-wrap">
             <div class="robot-crest">⚡</div>
             <div class="brand-title-box">
+                <span class="brand-sub">// AI_AGENT_BONE_SCANNER_v3.2</span>
                 <div class="brand-main">
                     <span class="brand-name">BoneSense AI™</span>
+                    <span class="robot-badge">ROBOTIC PACS WORKSTATION</span>
                 </div>
             </div>
         </div>
@@ -996,9 +998,13 @@
 
             <!-- Robotic Verdict Strip -->
             <div class="cyber-verdict-strip normal-mode" id="verdictStrip">
-                <div class="verdict-title" id="verdictTitle">STANDBY</div>
-                <div class="verdict-sub" id="verdictSub" style="display: none;"></div>
-                <div class="verdict-subtype-tag" id="verdictSubtypeTag" style="display: none;"></div>
+                <div>
+                    <div class="verdict-title" id="verdictTitle">STANDBY // AWAITING SCAN</div>
+                    <div class="verdict-sub" id="verdictSub">&gt;&gt; Ready to execute neural fracture detection pipeline.</div>
+                </div>
+                <div class="verdict-subtype-tag" id="verdictSubtypeTag" style="color: var(--text-main);">
+                    --
+                </div>
             </div>
 
             <!-- Robotic Viewport Shell -->
@@ -1288,14 +1294,17 @@
 
             if (data.is_fracture) {
                 vStrip.className = "cyber-verdict-strip fracture-mode";
-                vTitle.textContent = "FRACTURED";
+                vTitle.textContent = `⚠️ ACUTE FRACTURE DETECTED (${data.confidence_pct}%)`;
+                vSub.textContent = `>> Displaced cortical interruption identified at ${data.anatomical_portion}.`;
+                vTag.textContent = data.subtype.split('(')[0].trim().toUpperCase();
+                vTag.style.color = "var(--accent-rose)";
             } else {
                 vStrip.className = "cyber-verdict-strip normal-mode";
-                vTitle.textContent = "UNFRACTURED";
+                vTitle.textContent = `✅ NO FRACTURE DETECTED (INTACT ${bPart})`;
+                vSub.textContent = `>> Continuous cortical alignment preserved (${data.confidence_pct}% healthy confidence).`;
+                vTag.textContent = "INTACT BONE";
+                vTag.style.color = "var(--accent-emerald)";
             }
-            if (vSub) vSub.textContent = "";
-            if (vTag) vTag.textContent = "";
-
 
             // 4. Update Telemetry 2x2 Metric Tiles
             document.getElementById('kpiGap').textContent = `${data.displacement_gap_mm} mm`;

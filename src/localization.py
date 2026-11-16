@@ -506,20 +506,16 @@ def draw_orthopedic_calipers(canvas, metrics):
     # 1. Draw Bounding Box (Green)
     cv2.rectangle(canvas, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
     
-    # 2. Draw Clean & Subtle Fracture Target Circle (No messy red contour lines)
-    box_w = xmax - xmin
-    box_h = ymax - ymin
-    radius = max(18, min(34, int(min(box_w, box_h) * 0.35)))
-    
-    # Soft translucent red glow (bone structure underneath remains 100% visible)
-    overlay = canvas.copy()
-    cv2.circle(overlay, (cx, cy), radius, (0, 0, 230), -1, cv2.LINE_AA)
-    cv2.addWeighted(overlay, 0.20, canvas, 0.80, 0, canvas)
-    
-    # Clean, elegant outer red circle and pinpoint center dot
-    cv2.circle(canvas, (cx, cy), radius, (0, 0, 255), 2, cv2.LINE_AA)
-    cv2.circle(canvas, (cx, cy), 3, (0, 0, 255), -1, cv2.LINE_AA)
-
+    # 2. Draw Pinpoint Red Crack Mark (Tracing the actual cortical fissure)
+    crack_cnt = metrics.get("crack_contour")
+    if crack_cnt is not None:
+        cv2.drawContours(canvas, [crack_cnt], -1, (0, 0, 180), 3, cv2.LINE_AA)
+        cv2.drawContours(canvas, [crack_cnt], -1, (0, 0, 255), 2, cv2.LINE_AA)
+        
+    # Concentric Red Crosshair Target Marker at exact crack centroid
+    cv2.drawMarker(canvas, (cx, cy), (0, 0, 255), markerType=cv2.MARKER_CROSS, markerSize=18, thickness=2, line_type=cv2.LINE_AA)
+    cv2.circle(canvas, (cx, cy), 6, (0, 0, 255), 1, cv2.LINE_AA)
+    cv2.circle(canvas, (cx, cy), 12, (0, 0, 255), 1, cv2.LINE_AA)
     
     # 3. Draw Longitudinal Axis Guidelines
     box_h = ymax - ymin

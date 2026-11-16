@@ -17,11 +17,19 @@ from src.dataset import BoneFractureDataset
 from src.localization import GradCAMPlusPlus, extract_fracture_bbox_and_metrics
 
 def run_model_autocheck(
-    model_path=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\checkpoints\best_fracture_model.pt",
-    data_root=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data",
-    output_audit_plot=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data\model_audit_report.png",
-    output_audit_json=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data\model_audit_results.json"
+    model_path=None,
+    data_root=None,
+    output_audit_plot=None,
+    output_audit_json=None
 ):
+    if model_path is None:
+        model_path = os.path.join(WORKSPACE_ROOT, "checkpoints", "best_fracture_model.pt")
+    if data_root is None:
+        data_root = os.path.join(WORKSPACE_ROOT, "data")
+    if output_audit_plot is None:
+        output_audit_plot = os.path.join(WORKSPACE_ROOT, "data", "model_audit_report.png")
+    if output_audit_json is None:
+        output_audit_json = os.path.join(WORKSPACE_ROOT, "data", "model_audit_results.json")
     print("=" * 80)
     print("      AUTONOMOUS CLINICAL ML AUDIT & MODEL HEALTH INSPECTION")
     print("=" * 80)

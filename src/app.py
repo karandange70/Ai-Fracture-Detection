@@ -23,31 +23,18 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 # Device & Model setup
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-MURA_CHECKPOINT = os.path.join(WORKSPACE_ROOT, "checkpoints", "best_mura_finetuned_model.pt")
 FRACATLAS_CHECKPOINT = os.path.join(WORKSPACE_ROOT, "checkpoints", "best_fracatlas_model.pt")
 LEGACY_CHECKPOINT = os.path.join(WORKSPACE_ROOT, "checkpoints", "best_fracture_model.pt")
+CHECKPOINT_PATH = FRACATLAS_CHECKPOINT if os.path.exists(FRACATLAS_CHECKPOINT) else LEGACY_CHECKPOINT
 
-if os.path.exists(MURA_CHECKPOINT):
-    CHECKPOINT_PATH = MURA_CHECKPOINT
-elif os.path.exists(FRACATLAS_CHECKPOINT):
-    CHECKPOINT_PATH = FRACATLAS_CHECKPOINT
-else:
-    CHECKPOINT_PATH = LEGACY_CHECKPOINT
-
-has_custom_weights = os.path.exists(CHECKPOINT_PATH)
-model = DualBoneFractureNetwork(pretrained=(not has_custom_weights), num_classes=1, num_subtypes=5)
-if has_custom_weights:
+model = DualBoneFractureNetwork(pretrained=False, num_classes=1, num_subtypes=5)
+if os.path.exists(CHECKPOINT_PATH):
     ckpt = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
     model.load_state_dict(ckpt["model_state_dict"])
-    if "mura" in CHECKPOINT_PATH.lower():
-        model_name = "Stanford MURA + FracAtlas DualBoneNet"
-    elif "fracatlas" in CHECKPOINT_PATH.lower():
-        model_name = "FracAtlas Benchmark (Trained)"
-    else:
-        model_name = "DualBoneFractureNet"
+    model_name = "FracAtlas Benchmark (Trained)" if "fracatlas" in CHECKPOINT_PATH.lower() else "DualBoneFractureNet"
     print(f"[BoneSense App] Loaded {model_name} from {CHECKPOINT_PATH}")
 else:
-    print(f"[BoneSense App] Checkpoint not found at {CHECKPOINT_PATH}. Initialized with pretrained backbone features for zero-downtime cloud preview.")
+    print(f"[BoneSense App] WARNING: Checkpoint not found at {CHECKPOINT_PATH}")
 
 model.to(DEVICE)
 model.eval()
@@ -417,6 +404,5 @@ def analyze():
     })
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    print(f"[BoneSense App] Starting web dashboard on port {port} (http://127.0.0.1:{port}) ...")
-    app.run(host='0.0.0.0', port=port, debug=False)
+    print("[BoneSense App] Starting web dashboard on http://127.0.0.1:5000 ...")
+    app.run(host='127.0.0.1', port=5000, debug=False)

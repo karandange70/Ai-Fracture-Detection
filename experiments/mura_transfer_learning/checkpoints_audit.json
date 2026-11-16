@@ -1,0 +1,170 @@
+{
+  "anatomy_classifier.pt": {
+    "file_size_mb": 0.1,
+    "top_level_keys": [
+      "raw_state_dict"
+    ],
+    "metadata": {
+      "type": "raw_state_dict"
+    },
+    "num_tensor_weights": 16,
+    "total_parameters": 25798,
+    "matches_dual_bone_network_exact": false,
+    "matches_backbone": false,
+    "missing_keys_count": 186,
+    "unexpected_keys_count": 16,
+    "sample_missing_keys": [
+      "layer3.0.bn1.running_mean",
+      "layer2.0.bn1.bias",
+      "layer1.1.bn1.num_batches_tracked",
+      "loc_head.conv_l4.1.num_batches_tracked",
+      "inter_bone_att.key_conv.bias"
+    ],
+    "sample_unexpected_keys": [
+      "net.5.running_var",
+      "net.1.running_mean",
+      "net.1.num_batches_tracked",
+      "net.1.weight",
+      "net.1.running_var"
+    ]
+  },
+  "baseline_densenet121.pt": {
+    "file_size_mb": 27.08,
+    "top_level_keys": [
+      "raw_state_dict"
+    ],
+    "metadata": {
+      "type": "raw_state_dict"
+    },
+    "num_tensor_weights": 727,
+    "total_parameters": 7032378,
+    "matches_dual_bone_network_exact": false,
+    "matches_backbone": false,
+    "missing_keys_count": 186,
+    "unexpected_keys_count": 727,
+    "sample_missing_keys": [
+      "layer3.0.bn1.running_mean",
+      "layer2.0.bn1.bias",
+      "layer1.1.bn1.num_batches_tracked",
+      "loc_head.conv_l4.1.num_batches_tracked",
+      "inter_bone_att.key_conv.bias"
+    ],
+    "sample_unexpected_keys": [
+      "features.denseblock2.denselayer10.norm1.weight",
+      "features.denseblock3.denselayer12.norm1.bias",
+      "features.denseblock2.denselayer10.norm1.bias",
+      "features.denseblock2.denselayer11.norm1.bias",
+      "features.denseblock2.denselayer5.norm1.running_mean"
+    ]
+  },
+  "baseline_mobilenetv2.pt": {
+    "file_size_mb": 8.72,
+    "top_level_keys": [
+      "raw_state_dict"
+    ],
+    "metadata": {
+      "type": "raw_state_dict"
+    },
+    "num_tensor_weights": 314,
+    "total_parameters": 2258741,
+    "matches_dual_bone_network_exact": false,
+    "matches_backbone": false,
+    "missing_keys_count": 186,
+    "unexpected_keys_count": 314,
+    "sample_missing_keys": [
+      "layer3.0.bn1.running_mean",
+      "layer2.0.bn1.bias",
+      "layer1.1.bn1.num_batches_tracked",
+      "loc_head.conv_l4.1.num_batches_tracked",
+      "inter_bone_att.key_conv.bias"
+    ],
+    "sample_unexpected_keys": [
+      "features.16.conv.0.0.weight",
+      "features.5.conv.3.num_batches_tracked",
+      "features.13.conv.3.num_batches_tracked",
+      "features.5.conv.2.weight",
+      "features.8.conv.1.1.running_mean"
+    ]
+  },
+  "baseline_resnet18.pt": {
+    "file_size_mb": 42.69,
+    "top_level_keys": [
+      "raw_state_dict"
+    ],
+    "metadata": {
+      "type": "raw_state_dict"
+    },
+    "num_tensor_weights": 122,
+    "total_parameters": 11180373,
+    "matches_dual_bone_network_exact": false,
+    "matches_backbone": true,
+    "missing_keys_count": 66,
+    "unexpected_keys_count": 2,
+    "sample_missing_keys": [
+      "loc_head.conv_l3.1.running_var",
+      "cross_view_att.fusion_conv.1.weight",
+      "inter_bone_att.value_conv.weight",
+      "loc_head.conv_l4.1.num_batches_tracked",
+      "shared_fc.1.weight"
+    ],
+    "sample_unexpected_keys": [
+      "fc.weight",
+      "fc.bias"
+    ]
+  },
+  "best_fracatlas_model.pt": {
+    "file_size_mb": 51.3,
+    "top_level_keys": [
+      "epoch",
+      "model_state_dict",
+      "val_loss",
+      "dataset"
+    ],
+    "metadata": {
+      "epoch": 2,
+      "val_loss": 3.7669913162335327,
+      "dataset": "FracAtlas_Unified_Calibrated"
+    },
+    "num_tensor_weights": 186,
+    "total_parameters": 13432645,
+    "matches_dual_bone_network_exact": true,
+    "matches_backbone": true,
+    "missing_keys_count": 0,
+    "unexpected_keys_count": 0,
+    "sample_missing_keys": [],
+    "sample_unexpected_keys": []
+  },
+  "best_fracture_model.pt": {
+    "file_size_mb": 148.39,
+    "top_level_keys": [
+      "epoch",
+      "model_state_dict",
+      "optimizer_state_dict",
+      "train_loss",
+      "val_loss",
+      "val_accuracy",
+      "val_subtype_accuracy"
+    ],
+    "metadata": {
+      "epoch": 11,
+      "train_loss": 0.5743915601210161,
+      "val_loss": 0.5011555671691894,
+      "val_accuracy": 100.0,
+      "val_subtype_accuracy": 40.0
+    },
+    "num_tensor_weights": 156,
+    "total_parameters": 12962880,
+    "matches_dual_bone_network_exact": false,
+    "matches_backbone": true,
+    "missing_keys_count": 30,
+    "unexpected_keys_count": 0,
+    "sample_missing_keys": [
+      "loc_head.conv_l3.1.running_var",
+      "loc_head.conv_l4.1.num_batches_tracked",
+      "loc_head.conv_l4.0.bias",
+      "loc_head.decoder.4.weight",
+      "loc_head.decoder.1.weight"
+    ],
+    "sample_unexpected_keys": []
+  }
+}

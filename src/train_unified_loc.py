@@ -97,7 +97,7 @@ def compute_combined_loc_loss(pred_heat, targets):
     return bce + 2.0 * dice_loss
 
 def train_and_save_unified():
-    device = torch.device('cpu')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"[BoneSense] Training Dual-Bone Calibrated Detection + Localization Model on {device}...", flush=True)
     
     anno_path = os.path.join(WORKSPACE_ROOT, "data", "fracatlas_prepared", "annotations.json")

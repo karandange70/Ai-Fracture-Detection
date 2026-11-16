@@ -1,53 +1,44 @@
 import os
 import sys
-import argparse
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+WORKSPACE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, WORKSPACE_ROOT)
 
 from src.dataset import BoneFractureDataset
 from src.model import DualBoneFractureNetwork
 
 def train_model(
-    data_root=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data",
-    num_epochs=5,
-    batch_size=8,
-    learning_rate=1e-4,
-    checkpoint_dir=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\checkpoints"
+    data_root=None,
+    num_epochs=12,
+    batch_size=4,
+    learning_rate=3e-4,
+    checkpoint_dir=None
 ):
+    if data_root is None:
+        data_root = os.path.join(WORKSPACE_ROOT, "data")
+    if checkpoint_dir is None:
+        checkpoint_dir = os.path.join(WORKSPACE_ROOT, "checkpoints")
+
     os.makedirs(checkpoint_dir, exist_ok=True)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using compute device: {device}")
     
-    # Load dataset splits (Balanced MURA + FracAtlas + Clinical cases)
+    # Load dataset splits (Balanced Fracture + Normal)
     train_dataset = BoneFractureDataset(data_root=data_root, mode="train", is_train=True)
     test_dataset = BoneFractureDataset(data_root=data_root, mode="test", is_train=False)
     
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, drop_last=False, num_workers=0)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, drop_last=False, num_workers=0)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, drop_last=False)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, drop_last=False)
     
     print(f"Loaded {len(train_dataset)} Training samples ({len(train_loader)} batches/epoch)")
     print(f"Loaded {len(test_dataset)} Independent Test samples for validation")
     
-    # Initialize model
+    # Initialize model with Dual-View Cross-Attention & Multi-Task Heads
     model = DualBoneFractureNetwork(pretrained=True, num_classes=1, num_subtypes=5).to(device)
     
-    # Load pre-trained weights if available for continuous fine-tuning
-    prior_ckpt = os.path.join(checkpoint_dir, "best_fracatlas_model.pt")
-    if not os.path.exists(prior_ckpt):
-        prior_ckpt = os.path.join(checkpoint_dir, "best_fracture_model.pt")
-        
-    if os.path.exists(prior_ckpt):
-        try:
-            ckpt_data = torch.load(prior_ckpt, map_location=device)
-            state_dict = ckpt_data.get("model_state_dict", ckpt_data)
-            model.load_state_dict(state_dict, strict=False)
-            print(f"[Transfer Learning] Loaded base weights from {os.path.basename(prior_ckpt)}")
-        except Exception as e:
-            print(f"[Transfer Learning] Warning loading base weights: {e}")
-            
     criterion_det = nn.BCEWithLogitsLoss()
     criterion_sub = nn.CrossEntropyLoss()
     
@@ -55,17 +46,16 @@ def train_model(
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs)
     
     best_val_loss = float("inf")
-    checkpoint_path = os.path.join(checkpoint_dir, "best_mura_finetuned_model.pt")
-    legacy_checkpoint_path = os.path.join(checkpoint_dir, "best_fracture_model.pt")
+    checkpoint_path = os.path.join(checkpoint_dir, "best_fracture_model.pt")
     
-    print("\nStarting Multi-Dataset (MURA + FracAtlas) Dual-View Relational Training...")
+    print("\nStarting Dual-View Cross-Attention & Multi-Task Subtype Training...")
     print("-" * 85)
     
     for epoch in range(1, num_epochs + 1):
         model.train()
         train_loss = 0.0
         
-        for batch_idx, batch in enumerate(train_loader, 1):
+        for batch in train_loader:
             img_ap = batch["image_ap"].to(device)
             img_lat = batch["image_lat"].to(device)
             labels = batch["label"].to(device).unsqueeze(1)
@@ -76,6 +66,7 @@ def train_model(
             
             loss_det = criterion_det(det_logits, labels)
             
+            # Subtype loss computed on fracture instances
             frac_mask = (labels.squeeze(1) == 1.0)
             if frac_mask.sum() > 0:
                 loss_sub = criterion_sub(sub_logits[frac_mask], subtypes[frac_mask])
@@ -87,9 +78,6 @@ def train_model(
             optimizer.step()
             
             train_loss += loss.item() * img_ap.size(0)
-            
-            if batch_idx % 15 == 0 or batch_idx == len(train_loader):
-                print(f"  Epoch {epoch:02d} | Batch {batch_idx:02d}/{len(train_loader)} | Current Loss: {loss.item():.4f}", flush=True)
             
         epoch_train_loss = train_loss / len(train_dataset)
         scheduler.step()
@@ -130,34 +118,27 @@ def train_model(
         val_acc = (correct_det / len(test_dataset)) * 100.0
         val_sub_acc = (correct_sub / max(1, total_frac)) * 100.0
         
-        saved_str = ""
-        if epoch_val_loss < best_val_loss or epoch == 1:
+        if epoch_val_loss < best_val_loss:
             best_val_loss = epoch_val_loss
-            ckpt_payload = {
+            torch.save({
                 "epoch": epoch,
                 "model_state_dict": model.state_dict(),
                 "optimizer_state_dict": optimizer.state_dict(),
                 "train_loss": epoch_train_loss,
                 "val_loss": best_val_loss,
                 "val_accuracy": val_acc,
-                "val_subtype_accuracy": val_sub_acc,
-                "dataset": "MURA+FracAtlas+Clinical"
-            }
-            torch.save(ckpt_payload, checkpoint_path)
-            torch.save(ckpt_payload, legacy_checkpoint_path)
+                "val_subtype_accuracy": val_sub_acc
+            }, checkpoint_path)
             saved_str = f"[Checkpoint Saved -> Best Val Loss: {best_val_loss:.4f}]"
+        else:
+            saved_str = ""
             
-        print(f"Epoch [{epoch:02d}/{num_epochs:02d}] | Train Loss: {epoch_train_loss:.4f} | Val Loss: {epoch_val_loss:.4f} | Val Acc: {val_acc:.1f}% | Subtype Acc: {val_sub_acc:.0f}% {saved_str}", flush=True)
+        print(f"Epoch [{epoch:02d}/{num_epochs:02d}] | Train Loss: {epoch_train_loss:.4f} | Val Loss: {epoch_val_loss:.4f} | Val Acc: {val_acc:.1f}% | Subtype Acc: {val_sub_acc:.0f}% {saved_str}")
         
     print("-" * 85)
-    print(f"Training Complete! Best model saved to: {checkpoint_path}\n", flush=True)
+    print(f"Training Complete! Best model saved to: {checkpoint_path}\n")
     return checkpoint_path
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--epochs", type=int, default=4)
-    parser.add_argument("--batch_size", type=int, default=8)
-    parser.add_argument("--lr", type=float, default=1e-4)
-    args = parser.parse_args()
-    
-    train_model(num_epochs=args.epochs, batch_size=args.batch_size, learning_rate=args.lr)
+    train_model(num_epochs=12, batch_size=4)
+

@@ -22,70 +22,70 @@
       "filename": "img_001.png",
       "ground_truth": "Fracture",
       "predicted": "Fracture",
-      "probability": 0.814,
+      "probability": 0.9999,
       "correct": true
     },
     {
       "filename": "img_005.png",
       "ground_truth": "Fracture",
       "predicted": "Fracture",
-      "probability": 0.9267,
+      "probability": 0.9932,
       "correct": true
     },
     {
       "filename": "img_010.png",
       "ground_truth": "Fracture",
       "predicted": "Fracture",
-      "probability": 0.7126,
+      "probability": 0.9982,
       "correct": true
     },
     {
       "filename": "img_023.png",
       "ground_truth": "Fracture",
       "predicted": "Fracture",
-      "probability": 0.6005,
+      "probability": 0.9997,
       "correct": true
     },
     {
       "filename": "img_026.png",
       "ground_truth": "Fracture",
       "predicted": "Fracture",
-      "probability": 0.7164,
+      "probability": 0.9972,
       "correct": true
     },
     {
       "filename": "normal_001.png",
       "ground_truth": "Normal",
       "predicted": "Normal",
-      "probability": 0.133,
+      "probability": 0.0042,
       "correct": true
     },
     {
       "filename": "normal_004.png",
       "ground_truth": "Normal",
       "predicted": "Normal",
-      "probability": 0.0394,
+      "probability": 0.0062,
       "correct": true
     },
     {
       "filename": "normal_009.png",
       "ground_truth": "Normal",
       "predicted": "Normal",
-      "probability": 0.0424,
+      "probability": 0.005,
       "correct": true
     },
     {
       "filename": "normal_021.png",
       "ground_truth": "Normal",
       "predicted": "Normal",
-      "probability": 0.1952,
+      "probability": 0.0031,
       "correct": true
     },
     {
       "filename": "normal_024.png",
       "ground_truth": "Normal",
       "predicted": "Normal",
-      "probability": 0.0976,
+      "probability": 0.0055,
       "correct": true
     }
   ]

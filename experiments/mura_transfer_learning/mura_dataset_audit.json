@@ -1,0 +1,171 @@
+{
+  "timestamp": "2026-10-10 14:03:40",
+  "mura_root": "D:\\MURA dataset\\MURA-v1.1",
+  "splits": {
+    "train": {
+      "total_images": 36808,
+      "normal_images": 21935,
+      "abnormal_images": 14873,
+      "abnormal_ratio": 0.4041,
+      "total_studies": 13457,
+      "total_patients": 11184
+    },
+    "valid": {
+      "total_images": 3197,
+      "normal_images": 1667,
+      "abnormal_images": 1530,
+      "abnormal_ratio": 0.4786,
+      "total_studies": 1199,
+      "total_patients": 783
+    }
+  },
+  "overall": {
+    "total_images_in_csv": 40005,
+    "total_missing_files": 0,
+    "corrupted_images_detected": 0,
+    "total_studies": 14656,
+    "total_unique_patients": 11967
+  },
+  "leakage_audit": {
+    "train_patients_count": 11184,
+    "valid_patients_count": 783,
+    "patient_overlap_count": 0,
+    "data_leakage_detected": false,
+    "overlapping_patients": []
+  },
+  "image_properties": {
+    "sample_size": 300,
+    "width_min": 142,
+    "width_max": 512,
+    "width_mean": 396.0,
+    "height_min": 181,
+    "height_max": 512,
+    "height_mean": 491.0,
+    "modes_detected": {
+      "L": 177,
+      "RGB": 123
+    }
+  },
+  "corrupted_images": [],
+  "body_part_summary": [
+    {
+      "train_images": 4931,
+      "train_normal_images": 2925,
+      "train_abnormal_images": 2006,
+      "train_studies": 1754,
+      "train_normal_studies": 1094,
+      "train_abnormal_studies": 660,
+      "train_patients": 1711,
+      "valid_images": 465,
+      "valid_normal_images": 235,
+      "valid_abnormal_images": 230,
+      "valid_studies": 158,
+      "valid_normal_studies": 92,
+      "valid_abnormal_studies": 66,
+      "valid_patients": 152,
+      "body_part": "XR_ELBOW"
+    },
+    {
+      "train_images": 5106,
+      "train_normal_images": 3138,
+      "train_abnormal_images": 1968,
+      "train_studies": 1935,
+      "train_normal_studies": 1280,
+      "train_abnormal_studies": 655,
+      "train_patients": 1865,
+      "valid_images": 461,
+      "valid_normal_images": 214,
+      "valid_abnormal_images": 247,
+      "valid_studies": 175,
+      "valid_normal_studies": 92,
+      "valid_abnormal_studies": 83,
+      "valid_patients": 166,
+      "body_part": "XR_FINGER"
+    },
+    {
+      "train_images": 1825,
+      "train_normal_images": 1164,
+      "train_abnormal_images": 661,
+      "train_studies": 877,
+      "train_normal_studies": 590,
+      "train_abnormal_studies": 287,
+      "train_patients": 865,
+      "valid_images": 301,
+      "valid_normal_images": 150,
+      "valid_abnormal_images": 151,
+      "valid_studies": 133,
+      "valid_normal_studies": 69,
+      "valid_abnormal_studies": 64,
+      "valid_patients": 129,
+      "body_part": "XR_FOREARM"
+    },
+    {
+      "train_images": 5543,
+      "train_normal_images": 4059,
+      "train_abnormal_images": 1484,
+      "train_studies": 2018,
+      "train_normal_studies": 1497,
+      "train_abnormal_studies": 521,
+      "train_patients": 1945,
+      "valid_images": 460,
+      "valid_normal_images": 271,
+      "valid_abnormal_images": 189,
+      "valid_studies": 167,
+      "valid_normal_studies": 101,
+      "valid_abnormal_studies": 66,
+      "valid_patients": 159,
+      "body_part": "XR_HAND"
+    },
+    {
+      "train_images": 1272,
+      "train_normal_images": 673,
+      "train_abnormal_images": 599,
+      "train_studies": 592,
+      "train_normal_studies": 321,
+      "train_abnormal_studies": 271,
+      "train_patients": 587,
+      "valid_images": 288,
+      "valid_normal_images": 148,
+      "valid_abnormal_images": 140,
+      "valid_studies": 135,
+      "valid_normal_studies": 68,
+      "valid_abnormal_studies": 67,
+      "valid_patients": 132,
+      "body_part": "XR_HUMERUS"
+    },
+    {
+      "train_images": 8379,
+      "train_normal_images": 4211,
+      "train_abnormal_images": 4168,
+      "train_studies": 2821,
+      "train_normal_studies": 1364,
+      "train_abnormal_studies": 1457,
+      "train_patients": 2694,
+      "valid_images": 563,
+      "valid_normal_images": 285,
+      "valid_abnormal_images": 278,
+      "valid_studies": 194,
+      "valid_normal_studies": 99,
+      "valid_abnormal_studies": 95,
+      "valid_patients": 173,
+      "body_part": "XR_SHOULDER"
+    },
+    {
+      "train_images": 9752,
+      "train_normal_images": 5765,
+      "train_abnormal_images": 3987,
+      "train_studies": 3460,
+      "train_normal_studies": 2134,
+      "train_abnormal_studies": 1326,
+      "train_patients": 3267,
+      "valid_images": 659,
+      "valid_normal_images": 364,
+      "valid_abnormal_images": 295,
+      "valid_studies": 237,
+      "valid_normal_studies": 140,
+      "valid_abnormal_studies": 97,
+      "valid_patients": 207,
+      "body_part": "XR_WRIST"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "original_model": {
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall_sensitivity": 1.0,
+    "specificity": 1.0,
+    "f1_score": 1.0,
+    "auroc": 1.0,
+    "subtype_accuracy": 0.4,
+    "confusion_matrix": [
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        5
+      ]
+    ],
+    "sample_count": 10,
+    "fracture_count": 5,
+    "normal_count": 5,
+    "checkpoint": "checkpoints\\best_fracture_model.pt"
+  },
+  "experimental_model": {
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall_sensitivity": 1.0,
+    "specificity": 1.0,
+    "f1_score": 1.0,
+    "auroc": 1.0,
+    "subtype_accuracy": 0.2,
+    "confusion_matrix": [
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        5
+      ]
+    ],
+    "sample_count": 10,
+    "fracture_count": 5,
+    "normal_count": 5,
+    "checkpoint": "experiments\\mura_transfer_learning\\checkpoints\\best_mura_tibfib_model.pt"
+  }
+}

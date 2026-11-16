@@ -15,12 +15,22 @@ from src.dataset import BoneFractureDataset
 
 def evaluate_pipeline(
     split="test",
-    data_root=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data",
-    model_path=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\checkpoints\best_fracture_model.pt",
-    output_dashboard=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data\clinical_pipeline_results.png",
-    output_cm=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data\confusion_matrix.png",
-    output_json=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data\clinical_metrics.json"
+    data_root=None,
+    model_path=None,
+    output_dashboard=None,
+    output_cm=None,
+    output_json=None
 ):
+    if data_root is None:
+        data_root = os.path.join(WORKSPACE_ROOT, "data")
+    if model_path is None:
+        model_path = os.path.join(WORKSPACE_ROOT, "checkpoints", "best_fracture_model.pt")
+    if output_dashboard is None:
+        output_dashboard = os.path.join(WORKSPACE_ROOT, "data", "clinical_pipeline_results.png")
+    if output_cm is None:
+        output_cm = os.path.join(WORKSPACE_ROOT, "data", "confusion_matrix.png")
+    if output_json is None:
+        output_json = os.path.join(WORKSPACE_ROOT, "data", "clinical_metrics.json")
     """
     Executes the clinical evaluation pipeline:
     Independent Test Set -> Model Prediction -> Confusion Matrix -> 
@@ -56,8 +66,6 @@ def evaluate_pipeline(
             inp = sample["image"].unsqueeze(0).to(device)
             target = int(sample["label"].item())
             logits = model(inp)
-            if isinstance(logits, tuple):
-                logits = logits[0]
             prob = float(torch.sigmoid(logits).item())
             pred = 1 if prob >= 0.50 else 0
             

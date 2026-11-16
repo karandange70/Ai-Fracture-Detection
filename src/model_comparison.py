@@ -229,11 +229,19 @@ def evaluate_model_metrics(model, test_dataset, device):
 # Main Comparison Pipeline
 # ------------------------------------------------------------------------------
 def run_model_comparison(
-    data_root=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data",
-    checkpoint_dir=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\checkpoints",
-    output_plot=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data\model_comparison_results.png",
-    output_json=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data\model_comparison_results.json"
+    data_root=None,
+    checkpoint_dir=None,
+    output_plot=None,
+    output_json=None
 ):
+    if data_root is None:
+        data_root = os.path.join(WORKSPACE_ROOT, "data")
+    if checkpoint_dir is None:
+        checkpoint_dir = os.path.join(WORKSPACE_ROOT, "checkpoints")
+    if output_plot is None:
+        output_plot = os.path.join(WORKSPACE_ROOT, "data", "model_comparison_results.png")
+    if output_json is None:
+        output_json = os.path.join(WORKSPACE_ROOT, "data", "model_comparison_results.json")
     print("=" * 80)
     print("      COMPREHENSIVE MULTI-MODEL CLINICAL BENCHMARK & COMPARISON")
     print("=" * 80)

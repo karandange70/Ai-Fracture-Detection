@@ -1,33 +1,83 @@
-# Byte-compiled / optimized / DLL files
+# ==============================================================================
+# BoneSense AI - Git Ignore Specification
+# ==============================================================================
+
+# Python bytecode & cache
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# PyTorch checkpoints (Large weight files >100MB excluded per GitHub file size policy)
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment files
+.env
+!.env.example
+
+# IDE & Editor settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
+.settings/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Temporary directories and cache
+.cache/
+.matplotlib/
+scratch/
+tmp/
+temp/
+
+# Redundant timestamped checkpoint backups & large archives (>100MB)
+checkpoints/backups/
+chat_history_backup/
+*.zip
+*.tar.gz
+*.rar
+
+# Model checkpoints (>5MB)
+# Large weights are hosted via GitHub Releases to prevent HTTP 408 timeouts
 checkpoints/*.pt
 !checkpoints/anatomy_classifier.pt
-!checkpoints/.gitkeep
+experiments/mura_transfer_learning/checkpoints/*.pt
 
-# Datasets and generated batch images (Excluded from git history; reproduced via src/ scripts)
-data/raw/*
-!data/raw/.gitkeep
+# Bulk image datasets (Preserve directories via .gitkeep)
 data/cleaned/*
 !data/cleaned/.gitkeep
+data/fracatlas_prepared/*
+!data/fracatlas_prepared/.gitkeep
+data/raw/*
+!data/raw/.gitkeep
 data/dataset_splits/*
 !data/dataset_splits/.gitkeep
 data/predictions/*
 !data/predictions/.gitkeep
-data/fracatlas_prepared/
-data/MURA-v1.1/
-data/mura_parts/
-data/mura_archive.zip
-data/*.png
-data/*.jpg
-
-# Logs, caches, temporary & scratch files
-*.log
-scratch/
-chat_history_backup/
-.pytest_cache/
-.DS_Store
-Thumbs.db

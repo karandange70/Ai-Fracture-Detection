@@ -19,13 +19,17 @@ FRACTURE_SUBTYPE_MAP = {
     "img_002": 4, "img_006": 4, "img_012": 4, "img_024": 4, "img_028": 4
 }
 
+WORKSPACE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 class BoneFractureDataset(Dataset):
     """
     PyTorch Dataset for cleaned Bone Fracture X-rays.
     Supports dual-view (AP & Lateral orthogonal projections) and clinical subtype labels.
     """
-    def __init__(self, data_root=r"c:\Users\shaik\OneDrive\Desktop\ai frcture anti\data", 
+    def __init__(self, data_root=None, 
                  mode="unified_512", is_train=True, transform=None):
+        if data_root is None:
+            data_root = os.path.join(WORKSPACE_ROOT, "data")
         self.data_root = data_root
         self.mode = mode
         self.is_train = is_train
@@ -73,7 +77,6 @@ class BoneFractureDataset(Dataset):
         else:
             if is_train:
                 self.transform = T.Compose([
-                    T.Resize((512, 512)),
                     T.RandomHorizontalFlip(p=0.5),
                     T.RandomRotation(degrees=7),
                     T.ColorJitter(brightness=0.1, contrast=0.1),
@@ -82,7 +85,6 @@ class BoneFractureDataset(Dataset):
                 ])
             else:
                 self.transform = T.Compose([
-                    T.Resize((512, 512)),
                     T.ToTensor(),
                     T.Normalize(mean=[0.5], std=[0.5])
                 ])
